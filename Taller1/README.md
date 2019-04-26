@@ -23,9 +23,7 @@ Complete la tabla:
 | Integrante | github nick |
 |------------|-------------|
 | Lizzy Tengana Hurtado | lizzyt10h |
-|------------|-------------|
 | Laura Morales Ariza | lgmoralesa |
-|------------|-------------|
 | Sergio Sanchez | serbatero |
 
 ## Discusión
