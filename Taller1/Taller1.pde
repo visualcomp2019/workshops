@@ -1,6 +1,6 @@
-PGraphics pgOriginal, pgFiltered, pgConv, pgSBT;
-PImage img, g_img, sbt_img, sharpenK_img, blurK_img;
-int pgO_x, pgO_y, pgF_x, pgF_y, g_hist[], o_hist[];
+PGraphics pgOriginal, pgFiltered, pgConv, pgSBT; //<>//
+PImage img, g_img, gray_img, sbt_img, sharpenK_img, blurK_img, edgeD_img;
+int pgO_x, pgO_y, pgF_x, pgF_y, g_hist[], o_hist[], option = 1;
 float[][] sharpenKernel = { { -1, -1, -1 },
                             { -1,  9, -1 },
                             { -1, -1, -1 } };
@@ -8,60 +8,131 @@ float k = 1.0/9;
 float[][] blurKernel = { { k, k, k },
                          { k, k, k },
                          { k, k, k } };
+//float [][] edgeKernel = {{0, 1, 0},
+//                         {1, -4, 1},
+//                         {0, 1, 0}};
+float [][] edgeKernel = {{-1, -1, -1},
+                         {-1, 8, -1},
+                         {-1, -1, -1}};
+
 
 void setup() {
   //Initialize variables
-  size(1200,450);
+  size(1200,520);
   
-  img = loadImage("./data/the_kiss_gustav_klimt.png");
-  o_hist = histogram(img);  
-  g_img = loadImage("./data/the_kiss_gustav_klimt.png");
-  grayscale(g_img);
-  g_hist = histogram(g_img);
+  img = loadImage("paisaje.jpg");
+  //o_hist = histogram(img);  
+  g_img = loadImage("paisaje.jpg");
+  gray_img = createImage(img.width, img.height, RGB);
   sbt_img = createImage(img.width, img.height, RGB);
   sharpenK_img = createImage(img.width, img.height, RGB);
   blurK_img = createImage(img.width, img.height, RGB);
+  edgeD_img = createImage(img.width, img.height, RGB);
   
-  pgO_x = 0;
-  pgO_y = 0;
-  pgF_x = img.width+10;
+  pgO_x = 40;
+  pgO_y = 80;
+  pgF_x = img.width+30+pgO_x;
   pgF_y = 0;
   
-  pgOriginal = createGraphics(img.width, img.height);
-  pgFiltered = createGraphics(img.width, img.height);
+  frameRate(60);
+
+  //pgOriginal = createGraphics(img.width, img.height);
+  //pgFiltered = createGraphics(img.width, img.height);
   
   //draw Original image with histogram
-  pgOriginal.beginDraw();
-  pgOriginal.background(img);
-  pgOriginal.stroke(0);
-  pgOriginal.endDraw();
-  image(pgOriginal, pgO_x, pgO_y);
-  drawHistogram(o_hist, img.width, img.height, pgO_x);
+  //pgOriginal.beginDraw();
+  //pgOriginal.background(img);
+  //pgOriginal.stroke(0);
+  //pgOriginal.endDraw();
+  //image(pgOriginal, pgO_x, pgO_y);
+  //drawHistogram(o_hist, img.width, img.height, pgO_x);
   
   //draw Grayscale image with histogram
-  pgFiltered.beginDraw();
-  pgFiltered.background(g_img);
-  pgFiltered.stroke(75);
-  pgFiltered.endDraw();
-  image(pgFiltered, pgF_x, pgF_y);
-  drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
+  //pgFiltered.beginDraw();
+  //pgFiltered.background(g_img);
+  //pgFiltered.stroke(75);
+  //pgFiltered.endDraw();
+  //image(pgFiltered, pgF_x, pgF_y);
+  //drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
   
   //Image segmentation with brightness threshold
-  segBrightnessThreshold(g_hist, g_img, sbt_img);
-  image(sbt_img, (img.width+10)*2, 0);
+  //segBrightnessThreshold(g_hist, g_img, sbt_img);
+  //image(sbt_img, (img.width+10)*2, 0);
   
-  //Apply sharpen convolution kernel
-  convolution(sharpenKernel, img, sharpenK_img);
-  image(sharpenK_img, (img.width+10)*3, 0);
-  
-  //Apply sharpen convolution kernel 
-  convolution(blurKernel, img, blurK_img);
-  image(blurK_img, (img.width+10)*4, 0);
 }
 
 void draw() {
-  
+  navbar();
+  if(option == 1){
+    image(img, pgO_x, pgO_y);
+    //Image with gray scale 
+    grayscale(g_img);
+    image(g_img, pgF_x, pgO_y);
+  }else if(option == 2){
+    image(img, pgO_x, pgO_y);
+    //Apply blur convolution kernel 
+    convolution(blurKernel, img, blurK_img);
+    image(blurK_img, pgF_x, pgO_y);
+  }else if(option == 3){
+    image(img, pgO_x, pgO_y);
+    //Apply sharpen convolution kernel
+    convolution(sharpenKernel, img, sharpenK_img);
+    image(sharpenK_img, pgF_x, pgO_y);
+  }else if(option == 4){
+    image(img, pgO_x, pgO_y);
+    //Apply edge convolution kernel
+    convolution(edgeKernel, img, edgeD_img);
+    image(edgeD_img, pgF_x, pgO_y);
+  }else if(option == 5){
+    image(img, pgO_x, pgO_y);
+    o_hist = histogram(img);
+    drawHistogram(o_hist, img.width, img.height, pgO_x);
+    g_hist = histogram(g_img);
+    drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
+  }else if(option == 6){
+    image(img, pgO_x, pgO_y);
+    //Image segmentation with brightness threshold
+    //segBrightnessThreshold(g_hist, g_img, sbt_img);
+    //image(sbt_img, pgF_x, pgO_y);
+    segBrightnessThreshold(g_hist, g_img, sbt_img);
+    image(sbt_img, (img.width+10)*2, 0);
+  }
 }
+
+void navbar(){
+  fill(255);
+  rect(150, 25, 100, 30);
+  rect(300, 25, 100, 30);
+  rect(450, 25, 100, 30);
+  rect(600, 25, 100, 30);
+  rect(750, 25, 100, 30);
+  rect(900, 25, 100, 30);
+  fill(0);
+  text("Gray", 185, 45);
+  text("Conv blur", 325, 45);
+  text("Conv sharpen", 464, 45);
+  text("Conv edge", 623, 45);
+  text("Histogram", 774, 45);
+  text("Segmentation", 915, 45);
+  noFill();
+}
+
+void mouseClicked() {
+  if(mouseX > 150 && mouseX < 250 && mouseY > 25 && mouseY < 55) {
+    option = 1;
+  }else if(mouseX > 300 && mouseX < 400 && mouseY > 25 && mouseY < 55) {
+    option = 2;
+  }else if(mouseX > 450 && mouseX < 550 && mouseY > 25 && mouseY < 55) {
+    option = 3;
+  }else if(mouseX > 600 && mouseX < 700 && mouseY > 25 && mouseY < 55) {
+    option = 4;
+  }else if(mouseX > 750 && mouseX < 850 && mouseY > 25 && mouseY < 55) {
+    option = 5;
+  }else if(mouseX > 900 && mouseX < 950 && mouseY > 25 && mouseY < 55) {
+    option = 6;
+  }
+}
+
 
 void grayscale(PImage img) {  
   for(int i=0; i<img.width; i++){
@@ -69,7 +140,7 @@ void grayscale(PImage img) {
       color c = img.get(i,j);
       c = color(Math.round((red(c) + green(c) + blue(c))/3));
       img.set(i,j,c);      
-    } //<>//
+    }
   }
 }
 
