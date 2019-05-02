@@ -1,4 +1,4 @@
-PGraphics pgOriginal, pgFiltered, pgConv, pgSBT; //<>//
+PGraphics pgOriginal, pgFiltered, pgConv, pgSBT, pgHist; //<>//
 PImage img, g_img, gray_img, sbt_img, sharpenK_img, blurK_img, edgeD_img;
 int pgO_x, pgO_y, pgF_x, pgF_y, g_hist[], o_hist[], option = 1;
 float[][] sharpenKernel = { { -1, -1, -1 },
@@ -35,6 +35,7 @@ void setup() {
   pgF_y = 0;
   
   frameRate(60);
+  pgHist = createGraphics(img.width, img.height);
 
   //pgOriginal = createGraphics(img.width, img.height);
   //pgFiltered = createGraphics(img.width, img.height);
@@ -86,9 +87,12 @@ void draw() {
   }else if(option == 5){
     image(img, pgO_x, pgO_y);
     o_hist = histogram(img);
-    drawHistogram(o_hist, img.width, img.height, pgO_x);
-    g_hist = histogram(g_img);
-    drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
+    pgHist.beginDraw();
+    drawHistogram(o_hist, pgHist);
+    pgHist.endDraw();
+    image(pgHist, pgO_x, pgO_y);
+    //g_hist = histogram(g_img);
+    //drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
   }else if(option == 6){
     image(img, pgO_x, pgO_y);
     //Image segmentation with brightness threshold
@@ -158,18 +162,18 @@ int [] histogram(PImage img){
   return hist;
 }
 
-void drawHistogram(int[] hist, int dest_width, int dest_height,  int origin_x){
+void drawHistogram(int[] hist, PGraphics pgHist){
   // Find the largest value in the histogram
   int histMax = max(hist);
   
   // Draw half of the histogram (skip every second value)
-  for (int i = 0; i < dest_width; i += 2) {
+  for (int i = 0; i < pgHist.width; i += 2) {
     // Map i (from 0..img.width) to a location in the histogram (0..255)
-    int which = int(map(i, 0, dest_width, 0, 255));
+    int which = int(map(i, 0, pgHist.width, 0, 255));
     // Convert the histogram value to a location between 
     // the bottom and the top of the picture
-    int y = int(map(hist[which], 0, histMax, dest_height, 0));
-    line(i+origin_x, dest_height*2, i+origin_x, y+dest_height);
+    int y = int(map(hist[which], 0, histMax, pgHist.height, 0));
+    pgHist.line(i, pgHist.height, i, y);
   }
 }
 
