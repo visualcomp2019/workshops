@@ -90,7 +90,7 @@ void draw() {
     pgHist.beginDraw();
     drawHistogram(o_hist, pgHist);
     pgHist.endDraw();
-    image(pgHist, pgO_x, pgO_y);
+    image(pgHist, pgF_x, pgO_y);
     //g_hist = histogram(g_img);
     //drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
   }else if(option == 6){
