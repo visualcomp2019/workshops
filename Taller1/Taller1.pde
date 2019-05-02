@@ -118,6 +118,7 @@ void navbar(){
 }
 
 void mouseClicked() {
+  background(200);
   if(mouseX > 150 && mouseX < 250 && mouseY > 25 && mouseY < 55) {
     option = 1;
   }else if(mouseX > 300 && mouseX < 400 && mouseY > 25 && mouseY < 55) {
