@@ -1,6 +1,8 @@
-PGraphics pgOriginal, pgFiltered, pgConv, pgSBT, pgHist; //<>//
+import javafx.util.Pair; //<>//
+PGraphics pgOriginal, pgFiltered, pgConv, pgSBT, pgHist;
 PImage img, g_img, gray_img, sbt_img, sharpenK_img, blurK_img, edgeD_img;
-int pgO_x, pgO_y, pgF_x, pgF_y, g_hist[], o_hist[], option = 1;
+int pgO_x, pgO_y, pgF_x, pgF_y, g_hist[], hist[], option = 1;
+float seg_s=-1.0, seg_e=-1.0;
 float[][] sharpenKernel = { { -1, -1, -1 },
                             { -1,  9, -1 },
                             { -1, -1, -1 } };
@@ -21,7 +23,7 @@ void setup() {
   size(1200,520);
   
   img = loadImage("paisaje.jpg");
-  //o_hist = histogram(img);  
+  hist = histogram(img);
   g_img = loadImage("paisaje.jpg");
   gray_img = createImage(img.width, img.height, RGB);
   sbt_img = createImage(img.width, img.height, RGB);
@@ -86,20 +88,16 @@ void draw() {
     image(edgeD_img, pgF_x, pgO_y);
   }else if(option == 5){
     image(img, pgO_x, pgO_y);
-    o_hist = histogram(img);
     pgHist.beginDraw();
-    drawHistogram(o_hist, pgHist);
+    drawHistogram(hist, pgHist);
     pgHist.endDraw();
     image(pgHist, pgF_x, pgO_y);
-    //g_hist = histogram(g_img);
-    //drawHistogram(g_hist, g_img.width, g_img.height, pgF_x);
   }else if(option == 6){
     image(img, pgO_x, pgO_y);
     //Image segmentation with brightness threshold
-    //segBrightnessThreshold(g_hist, g_img, sbt_img);
-    //image(sbt_img, pgF_x, pgO_y);
-    segBrightnessThreshold(g_hist, g_img, sbt_img);
-    image(sbt_img, (img.width+10)*2, 0);
+    //firstHistLocalPeak(hist);
+    segBrightnessThreshold(img, sbt_img, min(seg_s,seg_e), max(seg_s,seg_e));
+    image(sbt_img, pgF_x, pgO_y);
   }
 }
 
@@ -133,9 +131,22 @@ void mouseClicked() {
     option = 4;
   }else if(mouseX > 750 && mouseX < 850 && mouseY > 25 && mouseY < 55) {
     option = 5;
-  }else if(mouseX > 900 && mouseX < 950 && mouseY > 25 && mouseY < 55) {
+    seg_s=-1.0;
+    seg_e=-1.0;
+  }else if(mouseX > 900 && mouseX < 1000 && mouseY > 25 && mouseY < 55) {
     option = 6;
+  }else if(option == 5 && mouseX > pgF_x && mouseX < pgF_x + img.width && mouseY > pgO_y && mouseY < pgO_y + img.height){
+    //Draw lines on histogram to be used for segmentation
+    if(seg_s == -1.0){
+      seg_s = mouseX-pgF_x;
+      line(mouseX, pgO_y, mouseX, pgO_y + pgHist.height);
+    }else if(seg_e == -1.0){
+      seg_e = mouseX-pgF_x;
+      line(seg_s+pgF_x, pgO_y, seg_s+pgF_x, pgO_y + pgHist.height);
+      line(mouseX, pgO_y, mouseX, pgO_y + pgHist.height);
+    }
   }
+  println("("+mouseX+", "+mouseY+")");
 }
 
 
@@ -177,9 +188,14 @@ void drawHistogram(int[] hist, PGraphics pgHist){
   }
 }
 
-void segBrightnessThreshold (int[] hist, PImage source, PImage dest){
-  float threshold = max(hist)*0.3;
-
+void segBrightnessThreshold (PImage source, PImage dest, float start, float end){
+  if (start ==-1.0 || end == -1.0){
+    start=5;
+    end=150;
+  }else{
+    start  = map(start, 0, pgHist.width, 0, 255);
+    end = map(end, 0, pgHist.width, 0, 255);
+  }
   // We are going to look at both image's pixels
   source.loadPixels();
   dest.loadPixels();
@@ -188,7 +204,8 @@ void segBrightnessThreshold (int[] hist, PImage source, PImage dest){
     for (int y = 0; y < source.height; y++ ) {
       int loc = x + y*source.width;
       // Test the brightness against the threshold
-      if (brightness(source.pixels[loc]) > threshold) {
+      float b = brightness(source.pixels[loc]);
+      if (b > start && b < end) {        
         dest.pixels[loc]  = color(255);  // White
       }  else {
         dest.pixels[loc]  = color(0);    // Black
