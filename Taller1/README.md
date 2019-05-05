@@ -24,7 +24,7 @@ Complete la tabla:
 |------------|-------------|
 | Lizzy Tengana Hurtado | lizzyt10h |
 | Laura Morales Ariza | lgmoralesa |
-| Sergio Sanchez | serbatero |
+| Sergio Sanchez Plazas | serbatero |
 
 ## Discusión
 
