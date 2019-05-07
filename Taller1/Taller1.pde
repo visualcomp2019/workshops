@@ -17,6 +17,11 @@ float [][] edgeKernel = {{-1, -1, -1},
                          {-1, 8, -1},
                          {-1, -1, -1}};
 
+float[][] blurKernel5 = { { k, k, k, k, k },
+                         { k, k, k, k, k },
+                         { k, k, k , k, k},
+                       { k, k, k, k, k },
+                     { k, k, k, k, k },};
 
 void setup() {
   //Initialize variables
@@ -74,17 +79,17 @@ void draw() {
   }else if(option == 2){
     image(img, pgO_x, pgO_y);
     //Apply blur convolution kernel 
-    convolution(blurKernel, img, blurK_img);
+    convolution(blurKernel, img, blurK_img,3);
     image(blurK_img, pgF_x, pgO_y);
   }else if(option == 3){
     image(img, pgO_x, pgO_y);
     //Apply sharpen convolution kernel
-    convolution(sharpenKernel, img, sharpenK_img);
+    convolution(sharpenKernel, img, sharpenK_img, 3);
     image(sharpenK_img, pgF_x, pgO_y);
   }else if(option == 4){
     image(img, pgO_x, pgO_y);
     //Apply edge convolution kernel
-    convolution(edgeKernel, img, edgeD_img);
+    convolution(edgeKernel, img, edgeD_img, 3);
     image(edgeD_img, pgF_x, pgO_y);
   }else if(option == 5){
     image(img, pgO_x, pgO_y);
@@ -246,7 +251,7 @@ color applyKernel(int x, int y, float[][] kernel, int kernelsize, PImage img) {
   return color(rtotal,gtotal,btotal);
 }
 
-void convolution(float[][] kernel, PImage source, PImage dest){
+void convolution(float[][] kernel, PImage source, PImage dest, int kernelSize){
   // We are going to look at both image's pixels
   source.loadPixels();
   dest.loadPixels();
@@ -256,7 +261,7 @@ void convolution(float[][] kernel, PImage source, PImage dest){
     for (int y = 0; y < source.height; y++ ) {
       // Each pixel location (x,y) gets passed into a function called convolution() 
       // which returns a new color value to be displayed.
-      color c = applyKernel(x,y,kernel, 3,img);
+      color c = applyKernel(x,y,kernel, kernelSize,img);
       int loc = x + y*img.width;
       dest.pixels[loc] = c;
     }
