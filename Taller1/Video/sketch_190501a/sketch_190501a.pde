@@ -3,10 +3,12 @@ import processing.video.*; //<>//
 PGraphics canvas_initial;
 PGraphics canvas_trans;
 
-PImage image;
+//PImage image;
 Movie video;
 
 int maskSelected = 0;
+int c_trans_x = 825;
+
 
 float[][] edgeKernel = {{-1, -1, -1}, 
                         {-1, 8, -1}, 
@@ -17,9 +19,11 @@ float[][] sharpenKernel = { { -1, -1, -1 },
                             { -1, -1, -1 } };
 
 float k = 1.0/9;
-float[][] blurKernel = { { k, k, k }, 
-                         { k, k, k }, 
-                         { k, k, k } };
+float[][] blurKernel = { { k, k, k, k, k }, 
+                         { k, k, k, k, k }, 
+                         { k, k, k, k, k },
+                         { k, k, k, k, k },
+                         { k, k, k, k, k }};
 
 
 boolean showVideo = true;
@@ -65,13 +69,14 @@ void chargeMedia(boolean media, PGraphics canvas) {
   canvas.beginDraw();
   if (media) {
     video = new Movie(this, "0321_presentschristmasclose_720p.mov");
-    canvas.image(video, 0, 0, 450, 450);
+    canvas.image(video, 0, 0, video.height, video.width);
     video.play();
     video.loop();
   } 
   canvas.endDraw();
   image(canvas, 50, 50);
 }
+
 void drawButtons() {
   pushStyle();
   textAlign(CENTER, CENTER);
@@ -82,15 +87,7 @@ void drawButtons() {
   int roundedCorner = 10;
 
 
-  //Button video
-  if (showVideo) {
-    fill(buttonDisabledColor);
-  } else {
-    fill(buttonBaseColor);
-  }
-  rect(buttonVideoX, buttonImageAndVideoY, buttonSizeX, buttonSizeY, roundedCorner);
-  fill(buttonTextColor);
-  text("Video", buttonVideoX, buttonImageAndVideoY, buttonSizeX, buttonSizeY);
+  
   
   //Buttons Convolutions
   for (int i = 1; i < buttonConvX.length; i++) {
@@ -131,13 +128,14 @@ void setup() {
 
   textSize(18);
   fill(basicTextColor);
-  size(1500, 800);
+  size(1600, 800);
   frameRate(initialFrameRate);
   background(255);
+  
   text("Original:", 50, 35);
-  canvas_initial = createGraphics(650, 450);
-  text("Modificado:", 750, 35);
-  canvas_trans = createGraphics(650, 450);
+  canvas_initial = createGraphics(960, 540);
+  text("Modificado:", 800, 35);
+  canvas_trans = createGraphics(960, 540);
   chargeMedia(showVideo, canvas_initial);
   drawButtons();
 }
@@ -145,17 +143,20 @@ void setup() {
 void grayscale(PGraphics canvas, PImage img) { 
   canvas.beginDraw();
   
+  PImage new_img;
+  
+  new_img = createImage(img.width, img.height, RGB);
   for(int i=0; i<img.width; i++){
     for(int j=0; j<img.height; j++){
       color c = img.get(i,j);
       c = color(Math.round((red(c) + green(c) + blue(c))/3));
-      img.set(i,j,c);      
+      new_img.set(i,j,c);      
     }
   }
-  img.updatePixels();
-  canvas.image(img, 0, 0, 750, 450);
+  new_img.updatePixels();
+  canvas.image(new_img, 0, 0, 750, 450);
   canvas.endDraw();
-  image(canvas, 750, 50);
+  image(canvas, c_trans_x, 50);
 }
 
 void convolution(PGraphics canvas, PImage image, float[][] kernel) {
@@ -172,7 +173,7 @@ void convolution(PGraphics canvas, PImage image, float[][] kernel) {
   image_with_mask.updatePixels();
   canvas.image(image_with_mask, 0, 0, 750, 450);
   canvas.endDraw();
-  image(canvas, 750, 50);
+  image(canvas, c_trans_x, 50);
 }
 
 color applyKernel(int x, int y, float[][] kernel, PImage image){
@@ -198,30 +199,37 @@ color applyKernel(int x, int y, float[][] kernel, PImage image){
 
 
 void draw() {
-  if (!showVideo) {
-    if (video.available()) {
-      pushStyle();
-      stroke(255);
-      rectMode(CORNER);
-      fill(255);
-      rect(50, 500, 900, 40);
-      popStyle();
-      fill(basicTextColor);
-      String frameRateText = "Eficiencia Computacional "+ frameRate/initialFrameRate*100 + "%";
-      textSize(18);
-      text(frameRateText, 50, 520);
-      video.read();
-      if (showGray) {
-        grayscale(canvas_trans, video);
-      }
-      if (showMask) {
-        convolution(canvas_trans, video, getMask());
-      }
-      canvas_initial.beginDraw();
-      canvas_initial.image(video, 0, 0, 650, 450);
-      canvas_initial.endDraw();
-      image(canvas_initial, 50, 50);
+  pushStyle();
+  stroke(255);
+  rectMode(CORNER);
+  fill(255);
+  rect(50, 500, 900, 40);
+  popStyle();
+  fill(basicTextColor);
+  
+  if (video.available()) {
+    pushStyle();
+    stroke(255);
+    rectMode(CORNER);
+    fill(255);
+    rect(50, 500, 900, 40);
+    popStyle();
+    fill(basicTextColor);
+    String frameRateText = "Eficiencia Computacional "+ frameRate/initialFrameRate*100 + "%";
+    textSize(18);
+    text(frameRateText, 50, 520);
+    video.read();
+    if (showGray) {
+      grayscale(canvas_trans, video);
     }
+    if (showMask) {
+      convolution(canvas_trans, video, getMask());
+    }
+    canvas_initial.beginDraw();
+    canvas_initial.image(video, 0, 0, 750, 450);
+    canvas_initial.endDraw();
+    image(canvas_initial, 50, 50);
+    
   }
 }
 
@@ -257,13 +265,14 @@ void applyConvolution() {
   showMask = true;
   showGray = false;
 
-  if (showVideo) convolution(canvas_trans, image, getMask());
+  if (showVideo) convolution(canvas_trans, video, getMask());
   //Video will be process in movieEvent
 }
 
 void keyPressed() {
   handleKeyPress(key);
 }
+
 void handleKeyPress(char pressed) {
   if (pressed == 'm') {
     showVideo = false;
@@ -285,7 +294,7 @@ void handleKeyPress(char pressed) {
     showMask = false;
 
     maskSelected = 0;
-    if (showVideo) grayscale(canvas_trans, image);
+    if (showVideo) grayscale(canvas_trans, video);
     //Video will be process in movieEvent
   }
   if (pressed == 'h' && showVideo) {
