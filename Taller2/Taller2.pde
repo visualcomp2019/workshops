@@ -1,5 +1,6 @@
 PGraphics pg;
 int illusion;
+int loop=0;
 
 void setup() {
   illusion = 0;  
@@ -7,10 +8,11 @@ void setup() {
   noStroke(); 
   pg = createGraphics(600, 600, P3D);
   illusion0();
+  
 }
 
-void draw() {   
- 
+void draw() {
+  illusionSelector();
 }
 
 void keyPressed() {
@@ -26,12 +28,12 @@ void keyPressed() {
       illusion = 5;
     }else{
       illusion--;      
-    }
-    illusionSelector();
+    }    
   }
 }
 
 void illusionSelector() {
+  clear();
   pg.clear();
   switch(illusion) {
     case 0:
@@ -74,22 +76,19 @@ void illusion0() {
 }
 
 void illusion1() {
+  PGraphics pg_stars;
+  pg_stars = createGraphics(410, 200);
+  starsLoop(pg_stars);
+  
   pg.beginDraw();
-  pg.noStroke();
   pg.background(255);
-  pg.translate(width/2, height/2);
-  pg.fill(107, 195, 181); //Blue color
-  star(0, 0, 30, 80, 4, pg);
-  rotate(PI/4.0);
-  fill(220, 148, 152); //Pink color
-  star(0, 0, 30, 80, 4,pg);
-  rotate(PI/2.63); 
-  fill(173,169,180);  //Intermediate color
-  polygon(0, 0, 41, 4, pg);  // Square1
-  rotate(PI/4.0);
-  polygon(0, 0, 41, 4, pg);  // Square2
-  pg.endDraw();
-  image(pg,0,0);
+  pg.image(pg_stars,pg.width/2-pg_stars.width/2,pg.height/2-pg_stars.height/2);
+  pg.strokeWeight(3);
+  pg.point(pg.width*0.5,pg.height*0.5);
+  pg.strokeWeight(1);
+  pg.endDraw();  
+  
+  image(pg,0,0);     
 }
 
 void illusion2() {
@@ -108,6 +107,61 @@ void illusion5() {
 
 }
 
+void starsLoop(PGraphics pg_stars){
+  PGraphics pg_star_izq, pg_star_der;
+  pg_star_izq = createGraphics(200, 200);
+  pg_star_der = createGraphics(200, 200);
+  pg_star_izq.beginDraw();
+  pg_star_der.beginDraw();
+  pg_star_izq.translate(pg_star_izq.width/2, pg_star_izq.height/2);
+  pg_star_der.translate(pg_star_der.width/2, pg_star_der.height/2);
+  
+  switch(loop) {
+    case 0:
+      star(0, 0, 30, 80, 4, pg_star_izq);
+      pg_star_der.rotate(PI/4.0);
+      star(0, 0, 30, 80, 4, pg_star_der);
+      loop++;
+      delay(900);
+      break;
+    case 1:
+      pg_star_izq.rotate(PI/4.0);
+      star(0, 0, 30, 80, 4, pg_star_izq);
+      star(0, 0, 30, 80, 4, pg_star_der);
+      loop++;
+      delay(550);
+      break;
+    case 2:
+      makeColoredStar(pg_star_izq);
+      makeColoredStar(pg_star_der);
+      loop=0;
+      delay(550);
+      break;
+  }
+  pg_star_izq.endDraw();
+  pg_star_der.endDraw();
+  
+  pg_stars.beginDraw();
+  pg_stars.image(pg_star_izq,pg_stars.width/2 - pg_star_der.width - 5,0);
+  pg_stars.image(pg_star_der,pg_stars.width/2 + 5,0);
+  pg_stars.endDraw();
+}
+
+void makeColoredStar(PGraphics pgr) {
+  pgr.beginShape();
+  pgr.noStroke();
+  pgr.fill(107, 195, 181); //Blue color
+  star(0, 0, 30, 80, 4, pgr);
+  pgr.rotate(PI/4.0);
+  pgr.fill(220, 148, 152); //Pink color
+  star(0, 0, 30, 80, 4,pgr);
+  pgr.rotate(PI/2.63); 
+  pgr.fill(173,169,180);  //Intermediate color
+  polygon(0, 0, 41, 4, pgr);  // Square1
+  pgr.rotate(PI/4.0);
+  polygon(0, 0, 41, 4, pgr);  // Square2
+  pgr.endShape();
+}
 
 void polygon(float x, float y, float radius, int npoints, PGraphics pgr) {
   float angle = TWO_PI / npoints;
