@@ -28,8 +28,8 @@ Complete la tabla:
 |    Stepping feet     |      Motion & Time     |      https://michaelbach.de/ot/mot-feetLin/index.html      |   mousePressed                                 |                             |
 | Rotating stars | Afterimage | http://illusionoftheyear.com/2008/05/filling-in-the-afterimage-after-the-image/ | | https://processing.org/examples/regularpolygon.html https://processing.org/examples/star.html |
 | Rolling texture | Cognitiva | https://i.ytimg.com/vi/whv6kFqkIVo/maxresdefault.jpg | | |
-| Hering       |   Geometrica        |    https://michaelbach.de/ot/ang-hering/index.html        |    mousePressed                                |                             |
-|         |           |            |                                    |                             |
+| Hering       |   Geométrica        |    https://michaelbach.de/ot/ang-hering/index.html        |    mousePressed                                |                             |
+|  Munker       |    Fisiológica       |   https://michaelbach.de/ot/col-Munker/index.html         |       mousePressed: remueve las lineas intercaladas del fondo, keyPressed: (+,-) mueve el fondo de arriba a abajo       |                             |
 
 2. Describa brevememente las referencias estudiadas y los posibles temas en los que le gustaría profundizar
 
@@ -42,6 +42,10 @@ La ilusión óptica basada en “stepping feet” observamos en un fondo de cír
 El efecto "afterimage" es muy interesante ya que después de una extendida exposición a los colores de una imagen, el cerebro induce otra imagen que no está realmente presente usando los colores complementarios de la primera imagen y engañando a los receptores de la retina.
 
 En uso de luces en Processing con funciones como directionalLight(), spotlight() o ambienLight() tiene un grado de complejidad superior, ya que entender su funcionamiento y distinguir cada efecto resulta algo confuso para principiantes, sin embargo, su utilidad es innegable porque influye considerablemente en la percepción de movimiento y es un buen tema para profundizar.
+
+La ilusión Hering está basada en la ilusión estándar de Hering (1861) que tiene como principio la superposición de figuras que dan la percepción de que las lineas rectas se curvan. En este caso, las líneas se encuentran sobre un fondo de varios circulos que son los que generan la ilusión de curvatura. Al dar clic sobre la imagen, se revela el hecho de que las líneas rojas están completamente rectas todo el tiempo.
+
+En la ilusión Murker se expone el efecto de los contraste de color que generan la ilusión de que los dos bloques centrales son de distintos colores (gris claro y gris oscuro) aunque realmente no sea así. Sólo hay 3 colores diferentes, el blanco y negro intercalos como lineas horizontales en el fondo y un único gris que compone los dos segmentos idénticos. 
 
 ## Entrega
 
