@@ -34,6 +34,10 @@ Complete la tabla:
 
 2. Describa brevememente las referencias estudiadas y los posibles temas en los que le gustaría profundizar
 
+El patrón de interferencia de los círculos y las líneas forma un efecto conocido como efecto de Moiré, que produce la visualización de diferentes formas y deformaciones, en nuestro caso quisimos realizar un patrón de moiré generado por la superposición de dos patrones idénticos de círculos concéntricos.
+
+Si bien, principalmente un efecto visual, es la capacidad de traducir espacialmente lo que le da al efecto moiré el potencial para ser aplicado en un contexto de diseño, particularmente debido a su naturaleza interactiva y la dependencia de la participación de los participantes para revelar su verdadera belleza.
+
 ## Entrega
 
 * Hacer [fork](https://help.github.com/articles/fork-a-repo/) de la plantilla. Plazo: 12/5/19 a las 24h.
