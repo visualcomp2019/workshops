@@ -24,7 +24,7 @@ Complete la tabla:
 
 | Ilusión | Categoria | Referencia | Tipo de interactividad (si aplica) | URL código base (si aplica) |
 |---------|-----------|------------|------------------------------------|-----------------------------|
-|     Moire    |     Movimiento      |     https://wewanttolearn.wordpress.com/2015/10/07/moire-patterns/       |                                    |                             |
+|     Moire    |     Movimiento      |     https://wewanttolearn.wordpress.com/2015/10/07/moire-patterns/       |                                   |                             | https://www.openprocessing.org/sketch/348969
 |    Stepping feet     |      Motion & Time     |      https://michaelbach.de/ot/mot-feetLin/index.html      |   mousePressed                                 |                             |
 | Rotating stars | Afterimage | http://illusionoftheyear.com/2008/05/filling-in-the-afterimage-after-the-image/ | | https://processing.org/examples/regularpolygon.html https://processing.org/examples/star.html |
 | Rolling texture | Cognitiva | https://i.ytimg.com/vi/whv6kFqkIVo/maxresdefault.jpg | | |
@@ -33,6 +33,12 @@ Complete la tabla:
 |         |           |            |                                    |                             |
 
 2. Describa brevememente las referencias estudiadas y los posibles temas en los que le gustaría profundizar
+
+El patrón de interferencia de los círculos y las líneas forma un efecto conocido como efecto de Moiré, que produce la visualización de diferentes formas y deformaciones, en nuestro caso quisimos realizar un patrón de moiré generado por la superposición de dos patrones idénticos de círculos concéntricos.
+
+Si bien, principalmente un efecto visual, es la capacidad de traducir espacialmente lo que le da al efecto moiré el potencial para ser aplicado en un contexto de diseño, particularmente debido a su naturaleza interactiva y la dependencia de la participación de los participantes para revelar su verdadera belleza.
+
+La ilusión óptica basada en “stepping feet” observamos en un fondo de círculos blanco y negro, el movimiento de dos óvalos tanto vertical como horizontalmente notamos visualmente que al acercase al centro toman una ligera curva, sin embargo al quitar el fondo nos damos cuenta que los óvalos hacen su trayecto en línea recta.
 
 ## Entrega
 
