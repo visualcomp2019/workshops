@@ -38,6 +38,8 @@ El patrón de interferencia de los círculos y las líneas forma un efecto conoc
 
 Si bien, principalmente un efecto visual, es la capacidad de traducir espacialmente lo que le da al efecto moiré el potencial para ser aplicado en un contexto de diseño, particularmente debido a su naturaleza interactiva y la dependencia de la participación de los participantes para revelar su verdadera belleza.
 
+La ilusión óptica basada en “stepping feet” observamos en un fondo de círculos blanco y negro, el movimiento de dos óvalos tanto vertical como horizontalmente notamos visualmente que al acercase al centro toman una ligera curva, sin embargo al quitar el fondo nos damos cuenta que los óvalos hacen su trayecto en línea recta.
+
 ## Entrega
 
 * Hacer [fork](https://help.github.com/articles/fork-a-repo/) de la plantilla. Plazo: 12/5/19 a las 24h.
