@@ -29,7 +29,7 @@ Complete la tabla:
 | Rotating stars | Afterimage | http://illusionoftheyear.com/2008/05/filling-in-the-afterimage-after-the-image/ | | https://processing.org/examples/regularpolygon.html https://processing.org/examples/star.html |
 | Rolling texture | Cognitiva | https://i.ytimg.com/vi/whv6kFqkIVo/maxresdefault.jpg | | |
 | Hering       |   Geométrica        |    https://michaelbach.de/ot/ang-hering/index.html        |    mousePressed                                |                             |
-|  Munker       |    Fisiológica       |   https://michaelbach.de/ot/col-Munker/index.html         |       mousePressed: remueve las lineas intercaladas del fondo, keyPressed: (+,-) mueve el fondo de arriba a abajo       |                             |
+|  Munker       |    Fisiológica       |   https://michaelbach.de/ot/col-Munker/index.html         |       mousePressed: remueve las lineas intercaladas del fondo. Mover el mouse de arriba a abajo mueve las lineas del fondo en la dirección respectiva       |                             |
 
 2. Describa brevememente las referencias estudiadas y los posibles temas en los que le gustaría profundizar
 
