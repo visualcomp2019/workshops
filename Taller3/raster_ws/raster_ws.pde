@@ -22,7 +22,7 @@ boolean debug = true;
 String renderer = P3D;
 
 // 4. Window dimension
-int dim = 10;
+int dim = 9;
 
 void settings() {
   size(int(pow(2, dim)), int(pow(2, dim)), renderer);
@@ -87,6 +87,36 @@ void triangleRaster() {
     point(round(node.location(v1).x()), round(node.location(v1).y()));
     popStyle();
   }
+  
+  
+  // Lizzy: get box around triangle
+  float minX = min(v1.x(), min(v2.x(),v3.x()));
+  float maxX = max(v1.x(), max(v2.x(),v3.x()));
+  float minY = min(v1.y(), min(v2.y(),v3.y()));
+  float maxY = max(v1.y(), max(v2.y(),v3.y()));
+  
+  
+  pushStyle();
+  stroke(126, 250, 252);
+  
+  // Lizzy: loop through each pixel in the box
+  for(float py = minY; py<=maxY;py++){
+    for(float px = minX; px<=maxX; px++){
+      // From v1 to v2
+      float f_12 = orient2D(v1.x(),v1.y(),v2.x(),v2.y(),px,py);
+      // From v2 to v3
+      float f_23 = orient2D(v2.x(),v2.y(),v3.x(),v3.y(),px,py);
+      // From v3 to v1
+      float f_31 = orient2D(v3.x(),v3.y(),v1.x(),v1.y(),px,py);
+      
+      // Lizzy: if all f's are positive, then the point is inside the triangle
+      if(f_12>=0 && f_23>=0 && f_31>=0){
+        Vector p = new Vector(px,py);
+        point(node.location(p).x(), node.location(p).y());        
+      }
+    }  
+  }
+  popStyle();  
 }
 
 void randomizeTriangle() {
@@ -95,6 +125,17 @@ void randomizeTriangle() {
   v1 = new Vector(random(low, high), random(low, high));
   v2 = new Vector(random(low, high), random(low, high));
   v3 = new Vector(random(low, high), random(low, high));
+  
+  // Lizzy: always make a "positive" counter-clockwise triangle
+  if(orient2D(v1.x(),v1.y(),v2.x(),v2.y(),v3.x(),v3.y())<0){
+    Vector temp = v1;
+    v1=v2;
+    v2=temp;
+  }
+}
+
+float orient2D(float ax, float ay, float  bx, float  by, float  cx, float cy){   
+  return (bx-ax)*(cy-ay)-(by-ay)*(cx-ax);
 }
 
 void drawTriangleHint() {
