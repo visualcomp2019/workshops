@@ -19,7 +19,7 @@ boolean gridHint = true;
 boolean debug = true;
 
 // 3. Use FX2D, JAVA2D, P2D or P3D
-String renderer = P3D;
+String renderer = P2D;
 
 // 4. Window dimension
 int dim = 9;
@@ -29,6 +29,7 @@ void settings() {
 }
 
 void setup() {
+  rectMode(CENTER);
   scene = new Scene(this);
   if (scene.is3D())
     scene.setType(Scene.Type.ORTHOGRAPHIC);
@@ -90,29 +91,30 @@ void triangleRaster() {
   
   
   // Lizzy: get box around triangle
+  /*
   float minX = min(v1.x(), min(v2.x(),v3.x()));
   float maxX = max(v1.x(), max(v2.x(),v3.x()));
   float minY = min(v1.y(), min(v2.y(),v3.y()));
   float maxY = max(v1.y(), max(v2.y(),v3.y()));
-  
+  */
   
   pushStyle();
   stroke(126, 250, 252);
   
-  // Lizzy: loop through each pixel in the box
-  for(float py = minY; py<=maxY;py++){
-    for(float px = minX; px<=maxX; px++){
+  // Lizzy: loop through each pixel
+  for(float py = pow(2, n)/2; py>=-pow(2, n)/2;py--){
+    for(float px = -pow(2, n)/2; px<=pow(2, n)/2; px++){
       // From v1 to v2
-      float f_12 = orient2D(v1.x(),v1.y(),v2.x(),v2.y(),px,py);
+      float f_12 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),px,py);
       // From v2 to v3
-      float f_23 = orient2D(v2.x(),v2.y(),v3.x(),v3.y(),px,py);
+      float f_23 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),px,py);
       // From v3 to v1
-      float f_31 = orient2D(v3.x(),v3.y(),v1.x(),v1.y(),px,py);
+      float f_31 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),px,py);
       
       // Lizzy: if all f's are positive, then the point is inside the triangle
       if(f_12>=0 && f_23>=0 && f_31>=0){
-        Vector p = new Vector(px,py);
-        point(node.location(p).x(), node.location(p).y());        
+        //point(px,py);
+        rect(px, py,1,1);
       }
     }  
   }
@@ -134,7 +136,7 @@ void randomizeTriangle() {
   }
 }
 
-float orient2D(float ax, float ay, float  bx, float  by, float  cx, float cy){   
+float orient2D(float ax, float ay, float  bx, float  by, float  cx, float cy){
   return (bx-ax)*(cy-ay)-(by-ay)*(cx-ax);
 }
 
@@ -162,10 +164,12 @@ void keyPressed() {
   if (key == '+') {
     n = n < 7 ? n+1 : 2;
     node.setScaling(width/pow( 2, n));
+    println(n);
   }
   if (key == '-') {
     n = n >2 ? n-1 : 7;
     node.setScaling(width/pow( 2, n));
+    println(n);
   }
   if (key == 'r')
     randomizeTriangle();
