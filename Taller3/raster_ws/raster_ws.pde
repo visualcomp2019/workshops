@@ -24,6 +24,9 @@ String renderer = P2D;
 // 4. Window dimension
 int dim = 9;
 
+// triangle's vertices color
+color[] c = {color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)};
+
 void settings() {
   size(int(pow(2, dim)), int(pow(2, dim)), renderer);
 }
@@ -81,39 +84,40 @@ void draw() {
 // Coordinates are given in the node system which has a dimension of 2^n
 void triangleRaster() {
   // node.location converts points from world to node
-  // here we convert v1 to illustrate the idea
+  // Laura: here we convert v1,v2 and v3 to illustrate the three vertex
   if (debug) {
     pushStyle();
-    stroke(255, 255, 0, 125);
-    point(round(node.location(v1).x()), round(node.location(v1).y()));
+    setColor(color(c[1], 150));
+    rect(floor(node.location(v1).x()), floor(node.location(v1).y()),1,1);
+    setColor(color(c[2], 150));
+    rect(round(node.location(v2).x()), round(node.location(v2).y()),1,1);
+    setColor(color(c[0], 150));
+    rect(round(node.location(v3).x()), round(node.location(v3).y()),1,1);
     popStyle();
   }
   
-  
-  // Lizzy: get box around triangle
-  /*
-  float minX = min(v1.x(), min(v2.x(),v3.x()));
-  float maxX = max(v1.x(), max(v2.x(),v3.x()));
-  float minY = min(v1.y(), min(v2.y(),v3.y()));
-  float maxY = max(v1.y(), max(v2.y(),v3.y()));
-  */
-  
   pushStyle();
-  stroke(126, 250, 252);
   
   // Lizzy: loop through each pixel
-  for(float py = pow(2, n)/2; py>=-pow(2, n)/2;py--){
+  for(float py = pow(2, n)/2; py >= -pow(2, n)/2; py--){
     for(float px = -pow(2, n)/2; px<=pow(2, n)/2; px++){
+
       // From v1 to v2
       float f_12 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),px,py);
       // From v2 to v3
       float f_23 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),px,py);
       // From v3 to v1
       float f_31 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),px,py);
-      
+         
       // Lizzy: if all f's are positive, then the point is inside the triangle
-      if(f_12>=0 && f_23>=0 && f_31>=0){
-        //point(px,py);
+      if(f_12 >= 0 && f_23 >= 0 && f_31 >=0 ){
+        //Laura: The value of each RGB channel is calculated according to the proximity to each vertex
+        float w = f_12 + f_23 + f_31;
+        float r = 255 * f_12/w;
+        float g = 255 * f_23/w;
+        float b = 255 * f_31/w; 
+        noStroke();
+        fill(r, g, b,200); 
         rect(px, py,1,1);
       }
     }  
@@ -138,6 +142,12 @@ void randomizeTriangle() {
 
 float orient2D(float ax, float ay, float  bx, float  by, float  cx, float cy){
   return (bx-ax)*(cy-ay)-(by-ay)*(cx-ax);
+}
+
+void setColor(color c) {
+  stroke(c);
+  fill(c);
+  noStroke();
 }
 
 void drawTriangleHint() {

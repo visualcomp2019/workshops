@@ -25,7 +25,9 @@ Complete la tabla:
 
 | Integrante | github nick |
 |------------|-------------|
-|            |             |
+| Lizzy Tengana Hurtado | lizzyt10h |
+| Laura Morales Ariza | lgmoralesa |
+| Sergio Sanchez Plazas | serbatero |
 
 ## Discusión
 
@@ -33,4 +35,4 @@ Describa los resultados obtenidos. En el caso de anti-aliasing describir las té
 
 ## Entrega
 
-* Plazo: 2/6/19 a las 24h.
+* Plazo: 4/6/19 a las 24h.
