@@ -99,8 +99,8 @@ void triangleRaster() {
   pushStyle();
   
   // Lizzy: loop through each pixel
-  for(float py = pow(2, n)/2; py >= -pow(2, n)/2; py--){
-    for(float px = -pow(2, n)/2; px<=pow(2, n)/2; px++){
+  for(float py = (pow(2, n)/2)+0.5; py >= -pow(2, n)/2; py--){
+    for(float px = (-pow(2, n)/2)+0.5; px<=pow(2, n)/2; px++){
 
       // From v1 to v2
       float f_12 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),px,py);
