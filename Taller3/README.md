@@ -32,7 +32,10 @@ Complete la tabla:
 ## Discusión
 
 Describa los resultados obtenidos. En el caso de anti-aliasing describir las técnicas exploradas, citando las referencias.
-
+Raster
+![alt text](http://url/to/img.png)
+Antialiasing
+![alt text](http://url/to/img.png)
 ## Entrega
 
 * Plazo: 4/6/19 a las 24h.
