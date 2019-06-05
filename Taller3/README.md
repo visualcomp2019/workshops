@@ -35,11 +35,11 @@ En este taller se implementó la rasterización de un triángulo generado aleato
 
 A continuación se muestra la rasterización de un triángulo aleatoreo en diferentes tamaños de malla, donde se puede apreciar un efecto de definición del triángulo a medida que la cantidad de "píxeles" crece.
 
-![raster1](./images/raster1.PNG)
+![raster1](./raster_ws/images/raster1.PNG)
 
-![raster2](./images/raster2.PNG)
+![raster2](./raster_ws/images/raster2.PNG)
 
-![raster3](./images/raster3.PNG)
+![raster3](./raster_ws/images/raster3.PNG)
 
 
 ###Dificultades
