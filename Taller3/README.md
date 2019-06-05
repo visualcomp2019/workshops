@@ -35,12 +35,7 @@ En este taller se implementó la rasterización de un triángulo generado aleato
 
 A continuación se muestra la rasterización de un triángulo aleatoreo en diferentes tamaños de malla, donde se puede apreciar un efecto de definición del triángulo a medida que la cantidad de "píxeles" crece.
 
-![raster1](./Anti.png)
-
-![raster2](./Sin.png)
-
 ![raster3](./raster_ws/images/raster3.PNG)
-
 
 ###Dificultades
 Las dificultades que presentamos en un principio se debieron a que no comprendimos con claridad que se debían colorear los "pixeles" sobre la malla generada y no sobre el mundo. Debido a esto tuvimos dificultades para calcular los límites de rasterización.
