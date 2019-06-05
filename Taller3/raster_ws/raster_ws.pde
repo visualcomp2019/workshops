@@ -23,7 +23,7 @@ boolean debug = true;
 String renderer = P2D;
 
 // 4. Window dimension
-int dim = 10;
+int dim = 9;
 
 // triangle's vertices color
 color[] c = {color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)};
@@ -82,13 +82,14 @@ void draw() {
 }
 float cr=0.0,cg=0.0,cb=0.0;
 
-void antialiasing(float px,float py) {
-    float pixelWidht=1/(fact);
- 
+void antialiasing(float px,float py, color c) {
+    float pixelW=1/(fact);
+    float cornerx=px-0.5, cornery=py-0.5;
+    int sum=0;
     for(int i = 0; i < fact; i++){
       for(int j = 0; j< fact; j++){
-        float x = px + pixelWidht * i;
-        float y = py + pixelWidht * j;
+        float x = cornerx + pixelW * i;
+        float y = cornery + pixelW * j;
     
         
         // From v1 to v2
@@ -97,37 +98,19 @@ void antialiasing(float px,float py) {
         float f_23 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),x,y);
         // From v3 to v1
         float f_31 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),x,y);
-        if((f_12 <= 50 && f_12>=-50 )||(f_23 <= 50 && f_23>=-50 )||(f_31 <= 50 && f_31>=-50 )){
-            
-            for(int m = 0;m<fact;m+=1){
-              for(int n = 0;n<fact;n+=1){
-                // From v1 to v2
-                float f_121 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),x+(m/fact),y+(n/fact));
-                  // From v2 to v3
-                float f_231 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),x+(m/fact),y+(n/fact));
-                // From v3 to v1
-                float f_311 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),x+(m/fact),y+(n/fact));
-                float w = f_121 + f_231 + f_311;
-                float r = 255 * f_121/w;
-                float g = 255 * f_231/w;
-                float b = 255 * f_311/w; 
-                cr += r;
-                cg += g;
-                cb += b;
-              
-              }
-            }
-            cr /= Math.pow(fact,2);
-            cg /= Math.pow(fact,2);
-            cb /= Math.pow(fact,2);
-            fill(cr, cg, cb,200); 
-            rect(px, py,1,1);
-
-     
+        if(f_12 >= 0 && f_23 >= 0 && f_31 >=0 ){
+          sum++;
         }
- 
       }
-    }  
+    }
+    float r,g,b, totalSubP;
+    totalSubP = fact*fact;
+    r=red(c)*sum/totalSubP;
+    g=green(c)*sum/totalSubP;
+    b=blue(c)*sum/totalSubP;
+    noStroke();
+    fill(r, g, b,200); 
+    rect(px, py,1,1);
       
 }
 // Implement this function to rasterize the triangle.
@@ -168,11 +151,12 @@ void triangleRaster() {
         float r = 255 * f_12/w;
         float g = 255 * f_23/w;
         float b = 255 * f_31/w; 
-        noStroke();
-        fill(r, g, b,200); 
-        rect(px, py,1,1);
+        //noStroke();
+        //fill(r, g, b,200); 
+        //rect(px, py,1,1);
         //Sergio:
-        antialiasing(px,py);
+        color c = color(r,g,b);
+        antialiasing(px,py, c);
       }
     }  
   }
