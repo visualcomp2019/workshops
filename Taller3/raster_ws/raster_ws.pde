@@ -12,6 +12,7 @@ TimingTask spinningTask;
 boolean yDirection;
 // scaling is a power of 2
 int n = 4;
+float fact =4;
 
 // 2. Hints
 boolean triangleHint = true;
@@ -22,7 +23,7 @@ boolean debug = true;
 String renderer = P2D;
 
 // 4. Window dimension
-int dim = 9;
+int dim = 10;
 
 // triangle's vertices color
 color[] c = {color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)};
@@ -79,13 +80,63 @@ void draw() {
   popStyle();
   popMatrix();
 }
+float cr=0.0,cg=0.0,cb=0.0;
 
+void antialiasing(float px,float py) {
+    float pixelWidht=1/(fact);
+ 
+    for(int i = 0; i < fact; i++){
+      for(int j = 0; j< fact; j++){
+        float x = px + pixelWidht * i;
+        float y = py + pixelWidht * j;
+    
+        
+        // From v1 to v2
+        float f_12 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),x,y);
+        // From v2 to v3
+        float f_23 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),x,y);
+        // From v3 to v1
+        float f_31 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),x,y);
+        if((f_12 <= 50 && f_12>=-50 )||(f_23 <= 50 && f_23>=-50 )||(f_31 <= 50 && f_31>=-50 )){
+            
+            for(int m = 0;m<fact;m+=1){
+              for(int n = 0;n<fact;n+=1){
+                // From v1 to v2
+                float f_121 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),x+(m/fact),y+(n/fact));
+                  // From v2 to v3
+                float f_231 = orient2D(node.location(v2).x(),node.location(v2).y(),node.location(v3).x(),node.location(v3).y(),x+(m/fact),y+(n/fact));
+                // From v3 to v1
+                float f_311 = orient2D(node.location(v3).x(),node.location(v3).y(),node.location(v1).x(),node.location(v1).y(),x+(m/fact),y+(n/fact));
+                float w = f_121 + f_231 + f_311;
+                float r = 255 * f_121/w;
+                float g = 255 * f_231/w;
+                float b = 255 * f_311/w; 
+                cr += r;
+                cg += g;
+                cb += b;
+              
+              }
+            }
+            cr /= Math.pow(fact,2);
+            cg /= Math.pow(fact,2);
+            cb /= Math.pow(fact,2);
+            fill(cr, cg, cb,200); 
+            rect(px, py,1,1);
+
+     
+        }
+ 
+      }
+    }  
+      
+}
 // Implement this function to rasterize the triangle.
 // Coordinates are given in the node system which has a dimension of 2^n
 void triangleRaster() {
   // node.location converts points from world to node
   // Laura: here we convert v1,v2 and v3 to illustrate the three vertex
   if (debug) {
+    /*
     pushStyle();
     setColor(color(c[1], 150));
     rect(floor(node.location(v1).x()), floor(node.location(v1).y()),1,1);
@@ -93,15 +144,15 @@ void triangleRaster() {
     rect(round(node.location(v2).x()), round(node.location(v2).y()),1,1);
     setColor(color(c[0], 150));
     rect(round(node.location(v3).x()), round(node.location(v3).y()),1,1);
-    popStyle();
+    popStyle();*/
   }
   
   pushStyle();
   
   // Lizzy: loop through each pixel
-  for(float py = pow(2, n)/2; py >= -pow(2, n)/2; py--){
-    for(float px = -pow(2, n)/2; px<=pow(2, n)/2; px++){
-
+  for(float py = (pow(2, n)/2)+0.5; py >= -pow(2, n)/2; py--){
+    for(float px = (-pow(2, n)/2)+0.5; px<=pow(2, n)/2; px++){
+             
       // From v1 to v2
       float f_12 = orient2D(node.location(v1).x(),node.location(v1).y(),node.location(v2).x(),node.location(v2).y(),px,py);
       // From v2 to v3
@@ -111,6 +162,7 @@ void triangleRaster() {
          
       // Lizzy: if all f's are positive, then the point is inside the triangle
       if(f_12 >= 0 && f_23 >= 0 && f_31 >=0 ){
+
         //Laura: The value of each RGB channel is calculated according to the proximity to each vertex
         float w = f_12 + f_23 + f_31;
         float r = 255 * f_12/w;
@@ -119,6 +171,8 @@ void triangleRaster() {
         noStroke();
         fill(r, g, b,200); 
         rect(px, py,1,1);
+        //Sergio:
+        antialiasing(px,py);
       }
     }  
   }
