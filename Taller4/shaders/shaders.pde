@@ -1,51 +1,79 @@
-PGraphics pg;
+PGraphics pg1, pg2;
 PImage img;
 PShape texImg;
-int option=0;
-Button blur_bttn, sharpen_bttn, edge_bttn, edge2_bttn;
-
 PShader texShader;
+int option=0;
+
+Button blur_bttn, sharpen_bttn, edge_bttn, edge2_bttn, frameRate_bttn;
+PrintWriter output;
+
+// Convolution matrices
+float k = 1.0/9;
+float [] original_vec = {0,0,0,0,1,0,0,0,0};
+float [] blur_vec = {k,k,k,k,k,k,k,k,k};
+float [] edge_vec = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+float [] sharpen_vec = {-1,-1,-1,-1,9,-1,-1,-1,-1};
+
 
 void setup() {
-  size(600,400, P2D);
-  pg = createGraphics(600,400, P2D);
+  size(1210,460, P2D);
+  pg1 = createGraphics(600,400, P2D);
+  pg2 = createGraphics(600,400, P2D);
   img = loadImage("paisaje.jpg");
   texImg = createShape(img);
-  texShader = loadShader("original.glsl");
+  texShader = loadShader("convfrag.glsl");
   
+  // Create a new file in the sketch directory
+  output = createWriter("software_fps.txt");
+
   //Buttons for navbar
-  blur_bttn = new Button("Conv blur", 40, 25, 100, 30); 
-  sharpen_bttn = new Button("Conv sharpen", 180, 25, 100, 30);  
-  edge_bttn = new Button("Conv edge", 320, 25, 100, 30); 
-  edge2_bttn = new Button("Conv edge2", 460, 25, 100, 30); 
+  blur_bttn = new Button("Conv blur", 640, 0, 100, 30); 
+  sharpen_bttn = new Button("Conv sharpen", 780, 0, 100, 30);  
+  edge_bttn = new Button("Conv edge", 920, 0, 100, 30); 
+  edge2_bttn = new Button("Conv edge2", 1060, 0, 100, 30);
+  frameRate_bttn = new Button("", 850, 430, 100, 30);
+  
+  pg1.beginDraw();
+  pg1.shape(texImg);
+  pg1.endDraw();
+   //<>//
 }
 
 void draw() {
   background(0);
-  pg.shader(texShader);
-  pg.shape(texImg);
-  
   switch(option){
     case 1:
-      //Apply blur convolution kernel 
-      texShader = loadShader("blurKernel.glsl");
+      //Apply blur convolution kernel
+      texShader.set("kernel", blur_vec);      
       break;
     case 2:
       //Apply sharpen convolution kernel
-      texShader = loadShader("sharpenKernel.glsl");
+      texShader.set("kernel", sharpen_vec);
       break;
     case 3:
       //Apply edge convolution kernel
-      texShader = loadShader("edgeKernel.glsl");
+      texShader.set("kernel", edge_vec);
       break;
     default:
       //original
-      texShader = loadShader("original.glsl");
+      texShader.set("kernel", original_vec);
       break;
   }
+  pg2.beginDraw();
+  pg2.shader(texShader);
+  pg2.shape(texImg);
+  pg2.endDraw();
   
-  image(pg, 0, 0);
+  image(pg1,0,30);
+  image(pg2,610,30);
   navbar();
+  frameRate_bttn.label = str(frameRate);
+  
+  frameRate_bttn.Draw(); 
+  
+  output.println(frameRate);
+  
+  
 }
 
 PShape createShape(PImage tex) {
@@ -71,7 +99,6 @@ void navbar(){
 }
 
 void mouseClicked() {
-  background(200);
   if(blur_bttn.MouseIsOver()) {
     option = 1;
   }else if(sharpen_bttn.MouseIsOver()) {
@@ -84,13 +111,9 @@ void mouseClicked() {
 }
 
 void keyPressed() {
-  if (key == '1') {  //Blur
-     texShader = loadShader("blurKernel.glsl");
-  }else if(key == '2'){ //Sharpen
-    texShader = loadShader("sharpenKernel.glsl");
-  }else if(key == '3'){ //Edge detection
-    texShader = loadShader("edgeKernel.glsl");
-  }else{ //original
-    texShader = loadShader("original.glsl");
+  if(key == 'p'){
+    output.flush();
+    output.close();    
+    exit();
   }
 }

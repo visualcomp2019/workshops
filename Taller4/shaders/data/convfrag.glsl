@@ -6,6 +6,7 @@ precision mediump int;
 uniform sampler2D texture;
 uniform vec2 texOffset;
 uniform int convolution;
+uniform float kernel[9];
 
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
@@ -34,10 +35,9 @@ void main() {
   vec4 col7 = texture2D(texture, tc7);
   vec4 col8 = texture2D(texture, tc8);
 
-  //EdgeKernel
-  vec4 sum =  -col0 -col1 -col2 
-              -col3 + 8*col4 -col5 
-              -col6 -col7 -col8;
-
+  //Kernel
+  vec4 sum =  col0*kernel[0] + col1*kernel[1] + col2*kernel[2]
+            + col3*kernel[3] + col4*kernel[4] + col5*kernel[5]
+            + col6*kernel[6] + col7*kernel[7] + col8*kernel[8];
   gl_FragColor = vec4(sum.rgb, 1.0) * vertColor;
 }
