@@ -3,24 +3,26 @@ PImage img;
 PShape texImg;
 PShader texShader;
 int option=0;
+final int pg_x=600, pg_y=400;
 
-Button blur_bttn, sharpen_bttn, edge_bttn, edge2_bttn, frameRate_bttn;
+Button blur_bttn, sharpen_bttn, edge_bttn, identity_bttn, frameRate_bttn;
 PrintWriter output;
 
 // Convolution matrices
 float k = 1.0/9;
-float [] original_vec = {0,0,0,0,1,0,0,0,0};
+float [] identity_vec = {0,0,0,0,1,0,0,0,0};
 float [] blur_vec = {k,k,k,k,k,k,k,k,k};
 float [] edge_vec = {-1,-1,-1,-1,8,-1,-1,-1,-1};
 float [] sharpen_vec = {-1,-1,-1,-1,9,-1,-1,-1,-1};
 
 
 void setup() {
+  
   size(1210,460, P2D);
-  pg1 = createGraphics(600,400, P2D);
-  pg2 = createGraphics(600,400, P2D);
+  pg1 = createGraphics(pg_x,pg_y, P2D);
+  pg2 = createGraphics(pg_x,pg_y, P2D);
   img = loadImage("paisaje.jpg");
-  texImg = createShape(img);
+  texImg = createShapeT(img, pg_x,pg_y);
   texShader = loadShader("convfrag.glsl");
   
   // Create a new file in the sketch directory
@@ -30,8 +32,8 @@ void setup() {
   blur_bttn = new Button("Conv blur", 640, 0, 100, 30); 
   sharpen_bttn = new Button("Conv sharpen", 780, 0, 100, 30);  
   edge_bttn = new Button("Conv edge", 920, 0, 100, 30); 
-  edge2_bttn = new Button("Conv edge2", 1060, 0, 100, 30);
-  frameRate_bttn = new Button("", 850, 430, 100, 30);
+  identity_bttn = new Button("Conv identity", 1060, 0, 100, 30);
+  frameRate_bttn = new Button("", 860, 430, 100, 30);
   
   pg1.beginDraw();
   pg1.shape(texImg);
@@ -56,7 +58,7 @@ void draw() {
       break;
     default:
       //original
-      texShader.set("kernel", original_vec);
+      texShader.set("kernel", identity_vec);
       break;
   }
   pg2.beginDraw();
@@ -76,17 +78,17 @@ void draw() {
   
 }
 
-PShape createShape(PImage tex) {
+PShape createShapeT(PImage tex, int x, int y) {
   textureMode(NORMAL);
   PShape shape = createShape();
   shape.beginShape();
-  //shape.noStroke();
-  textureMode(NORMAL);
+  shape.noStroke();  
   shape.texture(tex);
   shape.vertex(0, 0, 0, 0);
-  shape.vertex(width, 0, 1, 0);
-  shape.vertex(width, height, 1, 1);
-  shape.vertex(0, height, 0, 1);
+  shape.vertex(x, 0, 1, 0);
+  shape.vertex(x, y, 1, 1);
+  shape.vertex(0, y, 0, 1);
+  
   shape.endShape();
   return shape;
 }
@@ -95,7 +97,7 @@ void navbar(){
   blur_bttn.Draw(); 
   sharpen_bttn.Draw(); 
   edge_bttn.Draw(); 
-  edge2_bttn.Draw();   
+  identity_bttn.Draw();   
 }
 
 void mouseClicked() {
@@ -105,7 +107,7 @@ void mouseClicked() {
     option = 2;
   }else if(edge_bttn.MouseIsOver()) {
     option = 3;
-  }else if(edge2_bttn.MouseIsOver()) {
+  }else if(identity_bttn.MouseIsOver()) {
     option = 4;
   }
 }
