@@ -1,34 +1,51 @@
+PGraphics pg;
 PImage img;
 PShape texImg;
 int option=0;
+Button blur_bttn, sharpen_bttn, edge_bttn, edge2_bttn;
 
 PShader texShader;
 
 void setup() {
   size(600,400, P2D);
+  pg = createGraphics(600,400, P2D);
   img = loadImage("paisaje.jpg");
   texImg = createShape(img);
   texShader = loadShader("original.glsl");
+  
+  //Buttons for navbar
+  blur_bttn = new Button("Conv blur", 40, 25, 100, 30); 
+  sharpen_bttn = new Button("Conv sharpen", 180, 25, 100, 30);  
+  edge_bttn = new Button("Conv edge", 320, 25, 100, 30); 
+  edge2_bttn = new Button("Conv edge2", 460, 25, 100, 30); 
 }
 
 void draw() {
   background(0);
-  shader(texShader);
-  shape(texImg);
+  pg.shader(texShader);
+  pg.shape(texImg);
+  
+  switch(option){
+    case 1:
+      //Apply blur convolution kernel 
+      texShader = loadShader("blurKernel.glsl");
+      break;
+    case 2:
+      //Apply sharpen convolution kernel
+      texShader = loadShader("sharpenKernel.glsl");
+      break;
+    case 3:
+      //Apply edge convolution kernel
+      texShader = loadShader("edgeKernel.glsl");
+      break;
+    default:
+      //original
+      texShader = loadShader("original.glsl");
+      break;
+  }
+  
+  image(pg, 0, 0);
   navbar();
-  if(option == 1){
-    //Apply blur convolution kernel 
-    texShader = loadShader("blurKernel.glsl");
-  }else if(option == 2){
-    //Apply sharpen convolution kernel
-    texShader = loadShader("sharpenKernel.glsl");
-  }else if(option == 3){
-    //Apply edge convolution kernel
-    texShader = loadShader("edgeKernel.glsl");
-  }else{
-    //original
-    texShader = loadShader("original.glsl");
-  } 
 }
 
 PShape createShape(PImage tex) {
@@ -47,28 +64,21 @@ PShape createShape(PImage tex) {
 }
 
 void navbar(){
-  stroke(255);
-  rect(40, 25, 100, 30);
-  rect(180, 25, 100, 30);
-  rect(320, 25, 100, 30);
-  rect(460, 25, 100, 30);
-  stroke(0);
-  text("Conv blur", 60, 45);
-  text("Conv sharpen", 190, 45);
-  text("Conv edge", 340, 45);
-  text("Conv edge", 480, 45);
-  noStroke();
+  blur_bttn.Draw(); 
+  sharpen_bttn.Draw(); 
+  edge_bttn.Draw(); 
+  edge2_bttn.Draw();   
 }
 
 void mouseClicked() {
   background(200);
-  if(mouseX > 40 && mouseX < 140 && mouseY > 25 && mouseY < 55) {
+  if(blur_bttn.MouseIsOver()) {
     option = 1;
-  }else if(mouseX > 180 && mouseX < 280 && mouseY > 25 && mouseY < 55) {
+  }else if(sharpen_bttn.MouseIsOver()) {
     option = 2;
-  }else if(mouseX > 320 && mouseX < 420 && mouseY > 25 && mouseY < 55) {
+  }else if(edge_bttn.MouseIsOver()) {
     option = 3;
-  }else if(mouseX > 460 && mouseX < 560 && mouseY > 25 && mouseY < 55) {
+  }else if(edge2_bttn.MouseIsOver()) {
     option = 4;
   }
 }
