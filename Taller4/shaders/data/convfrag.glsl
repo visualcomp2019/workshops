@@ -5,7 +5,6 @@ precision mediump int;
 
 uniform sampler2D texture;
 uniform vec2 texOffset;
-uniform int convolution;
 uniform float kernel[9];
 
 varying vec4 vertColor;
