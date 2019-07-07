@@ -26,7 +26,7 @@ void setup() {
   texShader = loadShader("convfrag.glsl");
   
   // Create a new file in the sketch directory
-  output = createWriter("software_fps.txt");
+  output = createWriter("hardwareImg_fps.txt");
 
   //Buttons for navbar
   blur_bttn = new Button("Conv blur", 640, 0, 100, 30); 
@@ -35,14 +35,14 @@ void setup() {
   identity_bttn = new Button("Conv identity", 1060, 0, 100, 30);
   frameRate_bttn = new Button("", 860, 430, 100, 30);
   
+  background(0);
+
   pg1.beginDraw();
   pg1.shape(texImg);
   pg1.endDraw();
-   //<>//
 }
 
 void draw() {
-  background(0);
   switch(option){
     case 1:
       //Apply blur convolution kernel
