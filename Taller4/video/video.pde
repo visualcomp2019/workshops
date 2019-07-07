@@ -58,6 +58,7 @@ void draw() {
       break;
   }
   pg1.beginDraw();
+  myMovie.read();
   pg1.shape(texFrame);
   pg1.endDraw();
   
