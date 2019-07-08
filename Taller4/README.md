@@ -21,7 +21,7 @@ Complete la tabla:
 | Sergio Sanchez Plazas | serbatero |
 
 ## Informe
-### Punto 1
+### Punto 1 - Image and Video Processing
 
 En este punto se implementaron shaders (hardware) de máscaras de convolución tanto para imágenes como para videos y se los comparó con sus respectivas versiones por software. El resultado fue que las máscaras de convlución implementadas por hardware son significativamente más eficientes computacionalmente que las implementadas por software como se puede ver el la gráfica.
 
@@ -31,7 +31,7 @@ Las implementaciones por hardware tienden a estabilizarce a 60fps que es frameRa
 
 Por el contrario, las implementaciones por software ralentizan el desempeño del programa en aprox. 50% en el caso de las imágenes y en aprox. 80% en el caso del video con respecto a la implementación por hardware.
 
-### Punto 2
+### Punto 2 - Light Model
 
 En este punto se implementó un modelo de luz por medio de shaders (hardware) que consta de luz ambiental, una luz difusa y una luz especular. Las luces especular y difusa se implementaron con la librería nub y se representaron mediante esferas.
 
@@ -45,7 +45,16 @@ Finalmente, las interpolaciones respectivas para aplicar el efecto en los demás
 ![edge_conv](./Punto2_lightModel/edge_conv.png)
 
 
-### Punto 3
+### Punto 3 - Bump Mapping
+
+el Bump Mapping da, lo que parece una rugosidad de la superficie sobre un objeto. puede agregar detalles minuciosos a un objeto que, de lo contrario, requeriría una gran cantidad de polígonos, lo cual reduce el rendimiento de la GPU.
+El Bump Mapping es una extensión de la técnica de sombreado de Phong. En Phong Shading, la normal de la superficie se interpolaba sobre el polígono, y ese vector se usó para calcular el brillo de ese píxel. Cuando agrega la asignación de relieve, está modificando ligeramente el vector normal, basándose en la información del mapa de relieve. El ajuste del vector normal provoca cambios en el brillo de los píxeles en el polígono.
+Mediante el uso de normales por fragmento, podemos engañar a la iluminación para que crea que una superficie consiste en diminutos planos (perpendiculares a los vectores normales) que le dan a la superficie un enorme impulso de detalle. Esta técnica para usar las normales por fragmento en comparación con las normales por superficie se llama bump mapping
+
+![bump](./images/bump.jpg)
+
+- [Phong Shading](https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF).
+
 
 ## Entrega
 
