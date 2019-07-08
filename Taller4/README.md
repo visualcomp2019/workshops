@@ -21,6 +21,11 @@ Complete la tabla:
 ## Informe
 
 (elabore en este sección un informe del ejercicio realizado)
+## Bump Mapping
+
+el Bump Mapping da, lo que parece una rugosidad de la superficie sobre un objeto. puede agregar detalles minuciosos a un objeto que, de lo contrario, requeriría una gran cantidad de polígonos, lo cual reduce el rendimiento de la GPU.
+El Bump Mapping es una extensión de la técnica de sombreado de Phong. En Phong Shading, la normal de la superficie se interpolaba sobre el polígono, y ese vector se usó para calcular el brillo de ese píxel. Cuando agrega la asignación de relieve, está modificando ligeramente el vector normal, basándose en la información del mapa de relieve. El ajuste del vector normal provoca cambios en el brillo de los píxeles en el polígono.
+Mediante el uso de normales por fragmento, podemos engañar a la iluminación para que crea que una superficie consiste en diminutos planos (perpendiculares a los vectores normales) que le dan a la superficie un enorme impulso de detalle. Esta técnica para usar las normales por fragmento en comparación con las normales por superficie se llama bump mapping
 
 ## Entrega
 
