@@ -28,6 +28,9 @@ Mediante el uso de normales por fragmento, podemos engañar a la iluminación pa
 
 ![bump](./images/bump.jpg)
 
+- [Phong Shading](https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF).
+
+
 ## Entrega
 
 Fecha límite ~~Lunes 1/7/19~~ Domingo 7/7/19 a las 24h. Sustentaciones: 10/7/19 y 11/7/19.
