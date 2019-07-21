@@ -68,9 +68,10 @@ void draw() {
       break;
   }
   
-  myMovie.read();
+  
   
   pg1.beginDraw();  
+  myMovie.read();
   pg1.shape(createShapeT(frame,600,400));
   pg1.endDraw();
   

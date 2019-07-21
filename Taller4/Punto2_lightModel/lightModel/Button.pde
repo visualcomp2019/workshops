@@ -16,12 +16,14 @@ class Button {
   }
   
   void Draw() {
+    scene.beginHUD();
     if(on) fill(180); else fill(0);
     stroke(141);
     rect(x, y, w, h, 10);
     textAlign(CENTER, CENTER);
     fill(255);
     text(label, x + (w / 2), y + (h / 2));
+    scene.endHUD();
   }
   
   boolean MouseIsOver() {
