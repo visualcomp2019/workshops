@@ -29,7 +29,7 @@ void main() {
   vec3 ecNormal = normalize(normalMatrix * normal);
   
   //Difuse
-  vec3 direction = normalize(lightDir);
+  direction = normalize(lightDir);
   float att1 = 1.0/distance(posl1, ecPosition);
   float intensity1 = max(0.0, dot(direction, ecNormal));  
   vec3 colorDiffuse = colorl1*intensity1*att1;
