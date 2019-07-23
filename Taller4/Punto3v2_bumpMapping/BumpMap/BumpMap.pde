@@ -61,7 +61,7 @@ void draw() {
   pg2.shape(createShapeT(normalMap, pg_x, pg_y));
   pg2.endDraw();
   */
-  image(pg1,10,30);
+  image(normalMapPGraphics,10,30);
   image(pg2,620,30);
   
 }
